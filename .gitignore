@@ -1,4 +1,6 @@
 *.class
+src/main/resources/public/bower-libs
+target
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
