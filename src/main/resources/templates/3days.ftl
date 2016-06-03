@@ -7,7 +7,7 @@
             <h5 style="color: rgba(255,255,255,0.5);font-family: Comic Sans,cursive;" >TrueWeather v 0.14</h5></div>
     </div>
 
-    <img src="http://localhost:8080/img/spring.png" style="position: absolute; left: 58%; top: 19%">
+    <img src="/img/spring.png" style="position: absolute; left: 58%; top: 19%">
     <div class="container" style="width:100%">
         <div class="row">
             <div class="col-md-offset-4 col-md-4" align="center">
