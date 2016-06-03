@@ -1,0 +1,25 @@
+#!/bin/sh
+echo "Updating..."
+git pull
+
+echo "Install frontend libraries..."
+bower install
+
+echo "Building..."
+mvn clean install
+
+if [ ! -e target/TrueWeather-1.jar ]; then
+    echo "Build failed!"
+    exit 1
+else
+    echo "Build done."
+fi
+
+if [ -e application.pid ]; then
+
+pid=`cat application.pid`
+
+sudo /bin/kill -3 $pid
+
+
+
