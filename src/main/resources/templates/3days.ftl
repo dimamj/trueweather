@@ -1,6 +1,6 @@
 <#import "common.ftl" as c>
 
-<@c.page "3 days weather">
+<@c.page "3 days weather" "/js/3days.js">
 <div ng-app="3daysModule" ng-controller="3daysCtrl as vm">
     <div class="header">
         <div class="col-md-offset-10 col-md-2" align="right">
@@ -62,5 +62,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/js/3days.js"></script>
 </@c.page>

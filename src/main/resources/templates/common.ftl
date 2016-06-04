@@ -1,4 +1,4 @@
-<#macro page title>
+<#macro page title js="">
 <!DOCTYPE html>
 <html manifest="cache.appcache">
 <head>
@@ -12,6 +12,7 @@
 <script src="/bower-libs/angular/angular.min.js"></script>
 <script src="/bower-libs/jquery/dist/jquery.min.js"></script>
 <script src="/bower-libs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="${js}"></script>
 </body>
 </html>
 </#macro>
