@@ -6,5 +6,4 @@ spring.resources:
   chain.html-application-cache: true
   static-locations: classpath:/public/
 
-spring.freemarker.cache: true
 
