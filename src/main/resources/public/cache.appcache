@@ -1,16 +1,15 @@
 CACHE MANIFEST
 
-#v 0.38
+#v 0.4
 
 CACHE:
 img/CLOUDY.png
 img/just_vid.gif
 img/RAIN.png
 img/SNOW.png
-img/spring.png
 img/STORM.png
 img/SUNNY.png
-img/spring-wallpaper-20.jpg
+img/wallpaper.jpg
 img/offline.jpg
 
 NETWORK:

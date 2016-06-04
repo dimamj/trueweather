@@ -1,5 +1,7 @@
 server.host: 80
 
+spring.mvc.favicon.enabled: false
+
 spring.resources:
   chain.cache: true
   cache-period: 3600
