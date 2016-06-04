@@ -1,1 +1,10 @@
 server.host: 80
+
+spring.resources:
+  chain.cache: true
+  cache-period: 3600
+  chain.html-application-cache: true
+  static-locations: classpath:/public/
+
+spring.freemarker.cache: true
+

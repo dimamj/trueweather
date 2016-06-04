@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 public class WeatherDay {
-    @JsonFormat(pattern="dd MMMM")
+    @JsonFormat(pattern="dd MMMM",locale = "ru")
     private LocalDate date;
     private List<WeatherSegment> weatherDaySegments = Lists.newLinkedList();
     private UrlWeatherUtils.Site fromSite;

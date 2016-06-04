@@ -2,9 +2,6 @@
 echo "Updating..."
 git pull
 
-echo "Install frontend libraries..."
-bower install
-
 echo "Building..."
 mvn clean install
 
