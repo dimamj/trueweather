@@ -1,19 +1,17 @@
 CACHE MANIFEST
 
-#v 0.4
+#v 0.41
 
 CACHE:
 img/CLOUDY.png
-img/just_vid.gif
 img/RAIN.png
 img/SNOW.png
 img/STORM.png
 img/SUNNY.png
 img/wallpaper.jpg
 img/offline.jpg
+offline.html
 
 NETWORK:
 *
 
-FALLBACK:
-/ offline.html
