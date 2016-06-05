@@ -79,6 +79,7 @@ public class MeteoParser implements ParserWeather {
         }
 
         weatherDay.setWeatherDaySegments(weatherSegments);
+        System.out.println(URL + " : " + weatherDay.getWeatherDaySegments().size());
         return weatherDay;
     }
 }

@@ -49,7 +49,6 @@ public class SinoptikParser implements ParserWeather {
 
             date = date.plusDays(1);
         }
-
         return result;
     }
 
@@ -103,6 +102,8 @@ public class SinoptikParser implements ParserWeather {
         }
 
         weatherDay.setWeatherDaySegments(weatherSegments);
+
+        System.out.println(URL + " : " + weatherDay.getWeatherDaySegments().size());
         return weatherDay;
     }
 
