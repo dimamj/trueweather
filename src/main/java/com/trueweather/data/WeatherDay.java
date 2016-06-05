@@ -27,7 +27,7 @@ public class WeatherDay {
     }
 
     public void addVariants(WeatherDay other) {
-        for (int i = 0; i < weatherDaySegments.size(); i++) {
+        for (int i = 0; i < 4; i++) {
             weatherDaySegments.get(i).addVariants(other.getWeatherDaySegments().get(i));
         }
     }
