@@ -2,15 +2,12 @@ package com.trueweather.service;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.trueweather.data.Forecast;
 import com.trueweather.data.WeatherDay;
-import com.trueweather.data.WeatherSegment;
-import com.trueweather.parsers.GismeteoParser;
-import com.trueweather.parsers.MeteoParser;
 import com.trueweather.parsers.ParserWeather;
-import com.trueweather.parsers.SinoptikParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -23,11 +20,20 @@ import java.util.stream.Collectors;
 @Service
 public class WeatherService {
 
-    private final List<ParserWeather> parsers = Collections.unmodifiableList(Lists.newArrayList(
-            new SinoptikParser(),
-            new GismeteoParser(),
-            new MeteoParser()
-    ));
+    @Autowired
+    private ParserWeather gismeteoParser, meteoParser, sinoptikParser;
+
+    private List<ParserWeather> parsers;
+
+    @PostConstruct
+    private void init() {
+        parsers = Collections.unmodifiableList(Lists.newArrayList(
+                sinoptikParser,
+                gismeteoParser,
+                meteoParser
+        ));
+    }
+
 
     public List<WeatherDay> getTrueWeatherOnThreeDays(String city) {
         List<WeatherDay> resultFromParsers = Lists.newArrayList();

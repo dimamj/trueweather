@@ -8,9 +8,9 @@ import com.trueweather.utils.WeatherUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Created by dimaMJ on 21.05.2016.
  */
+@Component
 public class MeteoParser implements ParserWeather {
 
     private static final String URL = "https://www.meteo.ua/";

@@ -8,4 +8,9 @@ spring.resources:
   chain.html-application-cache: true
   static-locations: classpath:/public/
 
+logging:
+  config: classpath:logback-spring.xml
+  path: .
+
+
 

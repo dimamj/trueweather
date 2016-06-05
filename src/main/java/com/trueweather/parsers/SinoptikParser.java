@@ -10,10 +10,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,6 +24,7 @@ import java.util.Random;
 /**
  * Created by dimaMJ on 09.05.2016.
  */
+@Component
 public class SinoptikParser implements ParserWeather {
 
     private static final String URL = "https://sinoptik.com.ru/";
@@ -56,7 +56,6 @@ public class SinoptikParser implements ParserWeather {
 
     private WeatherDay getWeatherDay(Element element, LocalDate date, boolean thirdDay) {
         if (element == null) {
-            //TODO сюда бы какой то контрллер перехватчик
             throw new NotFoundError(URL);
         }
 

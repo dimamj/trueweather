@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import sun.net.util.URLUtil;
 
 import java.net.URLEncoder;
@@ -17,6 +18,7 @@ import java.net.URLEncoder;
  * Created by dimaMJ on 09.05.2016.
  */
 @SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class Application {
 
     public static void main(String[] args) throws Exception{
