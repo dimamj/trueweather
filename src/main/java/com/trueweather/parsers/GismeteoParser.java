@@ -74,7 +74,6 @@ public class GismeteoParser implements ParserWeather {
         }
 
         weatherDay.setWeatherDaySegments(weatherSegments);
-        System.out.println(URL + " : " + weatherDay.getWeatherDaySegments().size());
         return weatherDay;
     }
 }
