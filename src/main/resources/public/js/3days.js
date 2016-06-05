@@ -29,9 +29,9 @@ regApp.controller("3daysCtrl", function ($scope, $http) {
             if (res.error) {
                 $scope.error = res.error;
             } else {
-                $scope.vm.loadGif = false;
                 $scope.result = res.result;
             }
+            $scope.vm.loadGif = false;
         });
     }
 

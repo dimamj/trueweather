@@ -34,7 +34,7 @@ public class ThreeDaysWeatherController {
             return new Result("Город не задан!");
         }
 
-        return new Result(weatherService.getTrueWeatherOnThreeDays(city.toLowerCase()));
+        return new Result(weatherService.getTrueWeatherOnThreeDays(city.toLowerCase().trim()));
     }
 
     @Data

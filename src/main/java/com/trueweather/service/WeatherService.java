@@ -47,6 +47,10 @@ public class WeatherService {
     private List<WeatherDay> getThreeDaysAvgWeather(List<WeatherDay> resultFromParsers) {
         Map<LocalDate, WeatherDay> result = Maps.newHashMap();
         LocalDate date = LocalDate.now();
+        if (resultFromParsers.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         for (int i = 0; i < 3; i++) {
             final LocalDate finalDate = date;
             List<WeatherDay> weatherDays = resultFromParsers.stream()
