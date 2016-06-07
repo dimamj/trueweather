@@ -7,14 +7,24 @@ regApp.controller("3daysCtrl", function ($scope, $http) {
 
     this.city = "";
     this.loadGif = false;
+    this.cities = window.angularData.cities ? window.angularData.cities : [];
 
-    this.showPartOfDay = function(index){
-        switch (index){
-            case 0: return "Ночь";
-            case 1: return "Утро";
-            case 2: return "День";
-            case 3: return "Вечер"
+    this.showPartOfDay = function (index) {
+        switch (index) {
+            case 0:
+                return "Ночь";
+            case 1:
+                return "Утро";
+            case 2:
+                return "День";
+            case 3:
+                return "Вечер"
         }
+    };
+
+    this.go = function(city){
+        this.city = city;
+        this.searchWeather();
     };
 
 
@@ -29,6 +39,7 @@ regApp.controller("3daysCtrl", function ($scope, $http) {
             if (res.error) {
                 $scope.error = res.error;
             } else {
+                $scope.vm.cities = res.cities;
                 $scope.result = res.result;
             }
             $scope.vm.loadGif = false;

@@ -24,3 +24,18 @@ td {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
+
+.city {
+    color: white;
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+}
+
+.city:hover {
+    color: white;
+    text-shadow: 0 0 7px rgba(0,0,0,0.9);
+}
+
+.city:visited {
+    color: white;
+    text-shadow: 0 0 2px rgba(0,0,0,1);
+}

@@ -1,6 +1,6 @@
 <#macro page title js="">
 <!DOCTYPE html>
-<html manifest="cache.appcache">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>${title}</title>

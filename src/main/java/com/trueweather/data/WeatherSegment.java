@@ -45,6 +45,8 @@ public class WeatherSegment {
                     map.put(f,++count);
                 });
 
+        //TODO нужно усовершенствовать, т.е. брать 2 последних и проверять если оценка одинакова то выбирать дождь, если есть
+        //иначе любой вариант
         return map.entrySet().stream()
                 .sorted((a,b)->b.getValue().compareTo(a.getValue()))
                 .limit(1)
