@@ -57,7 +57,7 @@ public class CookieUtils {
 
 
     private static Cookie getCookie(HttpServletRequest request) {
-        if (request == null) {
+        if (request.getCookies() == null) {
             return null;
         }
         for (Cookie cookie : request.getCookies()) {
