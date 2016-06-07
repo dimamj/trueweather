@@ -57,6 +57,9 @@ public class CookieUtils {
 
 
     private static Cookie getCookie(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
         for (Cookie cookie : request.getCookies()) {
             if (cookie.getName().equals(COOKIE_NAME)) {
                 return cookie;
