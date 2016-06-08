@@ -15,7 +15,7 @@ public class UrlWeatherUtils {
     public static String buildUrl(String url, String cityName, Site site) {
         switch (site) {
             case SINOPTIK:
-                return getUrlFromGoogleSearch(cityName, "sinoptik");
+                return getUrlFromGoogleSearch(cityName, "sinoptik").replaceAll("25","");
             case GISMETEO:
                 return getUrlFromGoogleSearch(cityName, "gismeteo");
             case METEO:
