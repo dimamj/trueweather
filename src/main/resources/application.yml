@@ -4,8 +4,7 @@ spring.mvc.favicon.enabled: false
 
 spring.resources:
   chain.cache: true
-  cache-period: 3600
-  chain.html-application-cache: true
+  cache-period: 2592000 #30 days
   static-locations: classpath:/public/
 
 logging:

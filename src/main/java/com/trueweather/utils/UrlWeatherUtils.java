@@ -15,11 +15,7 @@ public class UrlWeatherUtils {
     public static String buildUrl(String url, String cityName, Site site) {
         switch (site) {
             case SINOPTIK:
-                try {
-                    return url + URLEncoder.encode("погода-" + cityName,"UTF8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                return getUrlFromGoogleSearch(cityName, "sinoptik");
             case GISMETEO:
                 return getUrlFromGoogleSearch(cityName, "gismeteo");
             case METEO:
