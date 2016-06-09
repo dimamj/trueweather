@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.trueweather.data.WeatherDay;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
+import com.trueweather.utils.UrlWeatherUtils.Site;
 import com.trueweather.utils.WeatherUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -23,11 +24,11 @@ import java.util.List;
 @Component
 public class MeteoParser implements ParserWeather {
 
-    private static final String URL = "https://www.meteo.ua/";
+    private static final Site site = Site.METEO;
 
     @Override
     public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
-        String resultUrl = UrlWeatherUtils.buildUrl(URL, cityName, UrlWeatherUtils.Site.METEO);
+        String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
         if(resultUrl.contains("month")){
             resultUrl = resultUrl.substring(0,resultUrl.length()-6);
         }
@@ -38,7 +39,7 @@ public class MeteoParser implements ParserWeather {
         try {
             body = connection.get().body();
         } catch (IOException e) {
-            throw new RuntimeException(URL, e);
+            throw new RuntimeException(site.getURL(), e);
         }
         Elements elements = body.select("tr.wnow_head");
 

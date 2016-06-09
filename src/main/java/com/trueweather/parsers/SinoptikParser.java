@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.trueweather.data.WeatherDay;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
+import com.trueweather.utils.UrlWeatherUtils.Site;
 import com.trueweather.utils.WeatherUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -27,13 +28,13 @@ import java.util.Random;
 @Component
 public class SinoptikParser implements ParserWeather {
 
-    private static final String URL = "https://sinoptik.com.ru/";
+    private static final Site site = Site.SINOPTIK;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private Random random = new Random();
 
     @Override
     public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
-        String resultUrl = UrlWeatherUtils.buildUrl(URL, cityName, UrlWeatherUtils.Site.SINOPTIK);
+        String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
         List<WeatherDay> result = Lists.newArrayList();
         LocalDate date = LocalDate.now();
 
@@ -44,7 +45,7 @@ public class SinoptikParser implements ParserWeather {
                 result.add(getWeatherDay(body.select("table.weatherDetails").first(), date, i == 2 && LocalDateTime.now()
                         .isBefore(LocalDateTime.of(LocalDate.now(), LocalTime.of(19, 0)))));
             } catch (IOException e) {
-                throw new RuntimeException(URL, e);
+                throw new RuntimeException(site.getURL(), e);
             }
 
             date = date.plusDays(1);
@@ -54,10 +55,6 @@ public class SinoptikParser implements ParserWeather {
 
 
     private WeatherDay getWeatherDay(Element element, LocalDate date, boolean thirdDay) {
-        if (element == null) {
-            throw new NotFoundError(URL);
-        }
-
         WeatherDay weatherDay = new WeatherDay(date, UrlWeatherUtils.Site.SINOPTIK);
 
         List<WeatherSegment> weatherSegments = Lists.newLinkedList();

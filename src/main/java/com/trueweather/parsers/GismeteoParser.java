@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.trueweather.data.WeatherDay;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
+import com.trueweather.utils.UrlWeatherUtils.Site;
 import com.trueweather.utils.WeatherUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -23,11 +24,11 @@ import java.util.List;
 @Component
 public class GismeteoParser implements ParserWeather {
 
-    private static final String URL = "https://www.gismeteo.ua/";
+    private static final Site site = Site.GISMETEO;
 
     @Override
     public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
-        String resultUrl = UrlWeatherUtils.buildUrl(URL, cityName, UrlWeatherUtils.Site.GISMETEO);
+        String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
         List<WeatherDay> result = Lists.newArrayList();
         LocalDate date = LocalDate.now();
 
@@ -37,7 +38,7 @@ public class GismeteoParser implements ParserWeather {
                 Element body = connection.get().body();
                 result.add(getWeatherDay(body.select("tbody#tbwdaily" + i).first(), date));
             } catch (IOException e) {
-                throw new RuntimeException(URL, e);
+                throw new RuntimeException(site.getURL(), e);
             }
 
             date = date.plusDays(1);

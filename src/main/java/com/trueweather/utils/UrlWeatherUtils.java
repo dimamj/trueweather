@@ -1,5 +1,6 @@
 package com.trueweather.utils;
 
+import lombok.Data;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,14 +13,13 @@ import java.net.URLEncoder;
  */
 public class UrlWeatherUtils {
 
-    public static String buildUrl(String url, String cityName, Site site) {
+    public static String buildUrl(String cityName, Site site) {
         switch (site) {
             case SINOPTIK:
-                return getUrlFromGoogleSearch(cityName, "sinoptik").replaceAll("25","");
+                return getUrlFromGoogleSearch(cityName, "sinoptik").replaceAll("25", "");
             case GISMETEO:
-                return getUrlFromGoogleSearch(cityName, "gismeteo");
             case METEO:
-                return getUrlFromGoogleSearch(cityName, "meteoua неделя");
+                return getUrlFromGoogleSearch(cityName, site.URL);
             default:
                 throw new RuntimeException("Unknown site.");
         }
@@ -27,7 +27,7 @@ public class UrlWeatherUtils {
 
     private static String getUrlFromGoogleSearch(String cityName, String site) {
         String url = "https://www.google.ru/search?q=";
-        String q = site + " " + cityName;
+        String q = "site:" + site + " погода " + cityName;
         try {
             Document document = Jsoup.connect(url + URLEncoder.encode(q, "UTF8")).userAgent("Chrome 41.0.2228.0").get();
             Element element = document.select("h3.r > a").first();
@@ -40,7 +40,17 @@ public class UrlWeatherUtils {
     }
 
     public enum Site {
-        SINOPTIK, GISMETEO, METEO
+        SINOPTIK("sinoptik.com.ru"), GISMETEO("gismeteo.ru"), METEO("meteo.ua");
+
+        String URL = "";
+
+        Site(String URL) {
+            this.URL = URL;
+        }
+
+        public String getURL() {
+            return URL;
+        }
     }
 
 }
