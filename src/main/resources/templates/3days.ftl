@@ -11,7 +11,7 @@ window.angularData = {
 <div ng-app="3daysModule" ng-controller="3daysCtrl as vm">
     <div class="header">
         <div class="col-md-offset-10 col-md-2" align="right">
-            <h5 style="color: rgba(255,255,255,0.5);font-family: Comic Sans,cursive;">TrueWeather v 0.3</h5></div>
+            <h5 style="color: rgba(255,255,255,0.5);font-family: Comic Sans,cursive;">TrueWeather v 0.4</h5></div>
     </div>
 
     <div class="container" style="width:100%">
