@@ -30,7 +30,6 @@ public class SinoptikParser implements ParserWeather {
 
     private static final Site site = Site.SINOPTIK;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private Random random = new Random();
 
     @Override
     public List<WeatherDay> getWeatherOnThreeDays(String cityName) {

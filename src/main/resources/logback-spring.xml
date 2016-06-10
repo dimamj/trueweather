@@ -12,6 +12,8 @@
 
     <logger name="parsers" level="ERROR" additivity="false">
         <appender-ref ref="parsers_log" />
+        <appender-ref ref="CONSOLE" />
     </logger>
+
 
 </configuration>

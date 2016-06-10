@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class WeatherService {
 
     @Autowired
-    private ParserWeather gismeteoParser, meteoParser, sinoptikParser;
+    private ParserWeather gismeteoParser, meteoParser, sinoptikParser,yandexParser;
 
     private List<ParserWeather> parsers;
 
@@ -30,7 +30,8 @@ public class WeatherService {
         parsers = Collections.unmodifiableList(Lists.newArrayList(
                 sinoptikParser,
                 gismeteoParser,
-                meteoParser
+                meteoParser,
+                yandexParser
         ));
     }
 

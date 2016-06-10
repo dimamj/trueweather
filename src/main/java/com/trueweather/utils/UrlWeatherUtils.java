@@ -16,9 +16,10 @@ public class UrlWeatherUtils {
     public static String buildUrl(String cityName, Site site) {
         switch (site) {
             case SINOPTIK:
-                return getUrlFromGoogleSearch(cityName, "sinoptik").replaceAll("25", "");
+                return getUrlFromGoogleSearch(cityName, site.URL).replaceAll("25", "");
             case GISMETEO:
             case METEO:
+            case YANDEX:
                 return getUrlFromGoogleSearch(cityName, site.URL);
             default:
                 throw new RuntimeException("Unknown site.");
@@ -40,7 +41,7 @@ public class UrlWeatherUtils {
     }
 
     public enum Site {
-        SINOPTIK("sinoptik.com.ru"), GISMETEO("gismeteo.ru"), METEO("meteo.ua");
+        SINOPTIK("sinoptik.com.ru"), GISMETEO("gismeteo.ru"), METEO("meteo.ua"), YANDEX("pogoda.yandex.ru");
 
         String URL = "";
 

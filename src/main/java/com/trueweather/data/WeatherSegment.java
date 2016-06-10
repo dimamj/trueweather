@@ -2,6 +2,7 @@ package com.trueweather.data;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import javafx.util.Pair;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -20,6 +21,9 @@ public class WeatherSegment {
     private List<Integer> temperatureVariants = Lists.newArrayList();
     private List<Forecast> forecastVariants = Lists.newArrayList();
 
+    public WeatherSegment() {
+    }
+
     public WeatherSegment(int temperature) {
         this.temperature = temperature;
     }
@@ -35,23 +39,24 @@ public class WeatherSegment {
         forecast = getAvgForecast();
     }
 
-    private Forecast getAvgForecast() {
+    protected Forecast getAvgForecast() {
         Map<Forecast, Integer> map = Maps.newHashMap();
 
         final Map<Forecast, Integer> finalMap = map;
         forecastVariants.stream()
                 .forEach(f -> {
-                    Integer count = finalMap.getOrDefault(f,0);
-                    map.put(f,++count);
+                    Integer count = finalMap.getOrDefault(f, 0);
+                    map.put(f, ++count);
                 });
 
-        //TODO нужно усовершенствовать, т.е. брать 2 последних и проверять если оценка одинакова то выбирать дождь, если есть
-        //иначе любой вариант
-        return map.entrySet().stream()
-                .sorted((a,b)->b.getValue().compareTo(a.getValue()))
-                .limit(1)
-                .map(Map.Entry::getKey)
-                .findFirst().get();
+        //если попадаются с одинаковым кол-вом очков то приоритетней будут осадки
+       return map.entrySet().stream()
+               .sorted((a, b) -> {
+                   if (a.getValue().equals(b.getValue())) {
+                       return b.getKey().isPrecipitation() ? 1 : a.getKey().isPrecipitation() ? -1 : 0;
+                   }
+                   return b.getValue().compareTo(a.getValue());
+               }).limit(1).map(Map.Entry::getKey).findFirst().get();
     }
 
 }
