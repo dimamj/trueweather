@@ -29,7 +29,7 @@ import java.util.Random;
 public class SinoptikParser implements ParserWeather {
 
     private static final Site site = Site.SINOPTIK;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
@@ -105,11 +105,15 @@ public class SinoptikParser implements ParserWeather {
     //а вообще лучше бы еще извлекать для синоптика вер-ть и по ней смотреть
     //если осадки и в-ять > 50 то возвращать
     private String getPriorityForecast(String f, String s) {
-        if (f.contains("дожд") || f.contains("гроз") || f.contains("снег")) {
-            return f;
-        } else {
-            return s;
+        for (String w : WeatherUtils.getForecastsPriority()) {
+            if (f.contains(w)) {
+                return f;
+            } else if (s.contains(w)) {
+                return s;
+            }
         }
+
+        return f;
     }
 
 

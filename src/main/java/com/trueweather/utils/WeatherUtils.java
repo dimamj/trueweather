@@ -1,10 +1,14 @@
 package com.trueweather.utils;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.trueweather.data.Forecast;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by dimaMJ on 21.05.2016.
@@ -12,6 +16,7 @@ import java.util.Optional;
 public class WeatherUtils {
 
     private static final Map<String, Forecast> forecasts = Maps.newLinkedHashMap();
+    private static LinkedHashSet<String> forecastsPriority = Sets.newLinkedHashSet();
 
     static {
         forecasts.put("гроз", Forecast.STORM);
@@ -19,6 +24,10 @@ public class WeatherUtils {
         forecasts.put("снег", Forecast.SNOW);
         forecasts.put("облачн|пасмурно|туман", Forecast.CLOUDY);
         forecasts.put("ясно", Forecast.SUNNY);
+
+        forecasts.keySet().forEach(f -> {
+            Collections.addAll(forecastsPriority, f.split("\\|"));
+        });
     }
 
     public static Forecast getForecastFromText(String text) {
@@ -40,5 +49,9 @@ public class WeatherUtils {
             }
         }
         return false;
+    }
+
+    public static LinkedHashSet<String> getForecastsPriority() {
+        return forecastsPriority;
     }
 }
