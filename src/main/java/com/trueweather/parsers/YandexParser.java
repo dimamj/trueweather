@@ -1,7 +1,9 @@
 package com.trueweather.parsers;
 
 import com.google.common.collect.Lists;
+import com.trueweather.data.Forecast;
 import com.trueweather.data.WeatherDay;
+import com.trueweather.data.WeatherFromParser;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
 import com.trueweather.utils.UrlWeatherUtils.Site;
@@ -27,7 +29,7 @@ public class YandexParser implements ParserWeather {
     private static final Site site = Site.YANDEX;
 
     @Override
-    public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
+    public WeatherFromParser getWeather(String cityName) {
         String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
 
         List<WeatherDay> result = Lists.newArrayList();
@@ -46,7 +48,20 @@ public class YandexParser implements ParserWeather {
             date = date.plusDays(1);
         }
 
-        return result;
+        return new WeatherFromParser(getCurrentWeather(body), result);
+    }
+
+    private WeatherSegment getCurrentWeather(Element element) {
+        Element block = element.select(".current-weather__col_type_now").first();
+
+        Element tempEl = block.select(".current-weather__thermometer").first();
+        String tempStr = ((TextNode) tempEl.childNode(0)).text();
+        int temp = Integer.parseInt(tempStr.substring(0, tempStr.length() - 3));
+
+        Element forecastEl = block.select(".current-weather__comment").first();
+        Forecast forecast = WeatherUtils.getForecastFromText((
+                (TextNode) forecastEl.childNode(0)).text());
+        return new WeatherSegment(temp, forecast);
     }
 
     private WeatherDay getWeatherDay(Element element, LocalDate date) {

@@ -1,7 +1,9 @@
 package com.trueweather.parsers;
 
 import com.google.common.collect.Lists;
+import com.trueweather.data.Forecast;
 import com.trueweather.data.WeatherDay;
+import com.trueweather.data.WeatherFromParser;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
 import com.trueweather.utils.UrlWeatherUtils.Site;
@@ -27,10 +29,10 @@ public class MeteoParser implements ParserWeather {
     private static final Site site = Site.METEO;
 
     @Override
-    public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
+    public WeatherFromParser getWeather(String cityName) {
         String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
-        if(resultUrl.contains("month")){
-            resultUrl = resultUrl.substring(0,resultUrl.length()-6);
+        if (resultUrl.contains("month")) {
+            resultUrl = resultUrl.substring(0, resultUrl.length() - 6);
         }
         List<WeatherDay> result = Lists.newArrayList();
         LocalDate date = LocalDate.now();
@@ -48,12 +50,23 @@ public class MeteoParser implements ParserWeather {
             date = date.plusDays(1);
         }
 
-        return result;
+        return new WeatherFromParser(getCurrentWeather(body), result);
+    }
+
+    private WeatherSegment getCurrentWeather(Element element) {
+        Element block = element.select(".wi_now").first();
+        Element tempEl = block.select(".thermometer").first();
+        String tempStr = tempEl.attr("title");
+        int temp = Integer.parseInt(tempStr.substring(0, tempStr.length() - 2));
+
+        Element forecastEl = block.select(".win_img").select("img").first();
+        Forecast forecast = WeatherUtils.getForecastFromText(forecastEl.attr("alt"));
+        return new WeatherSegment(temp, forecast);
     }
 
 
     private WeatherDay getWeatherDay(Element element, LocalDate date) {
-        WeatherDay weatherDay = new WeatherDay(date,UrlWeatherUtils.Site.METEO);
+        WeatherDay weatherDay = new WeatherDay(date, UrlWeatherUtils.Site.METEO);
         List<WeatherSegment> weatherSegments = Lists.newLinkedList();
 
         Elements temperatures = element.select("td > div > div.wnow_tmpr");
@@ -62,7 +75,7 @@ public class MeteoParser implements ParserWeather {
         while (iterator.hasNext()) {
             int temp = 0;
             TextNode node = (TextNode) iterator.next().childNode(0);
-            String val =  node.text().trim();
+            String val = node.text().trim();
             val = val.substring(0, val.length() - 1);
             temp += Integer.valueOf(val);
             weatherSegments.add(new WeatherSegment(temp));
@@ -73,7 +86,7 @@ public class MeteoParser implements ParserWeather {
 
         int index = 0;
         while (iterator.hasNext()) {
-            Element img =  iterator.next().select("img").first();
+            Element img = iterator.next().select("img").first();
             String val = img.attr("title");
             weatherSegments.get(index++).setForecast(
                     WeatherUtils.getForecastFromText(val));

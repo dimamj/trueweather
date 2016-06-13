@@ -1,7 +1,9 @@
 package com.trueweather.parsers;
 
 import com.google.common.collect.Lists;
+import com.trueweather.data.Forecast;
 import com.trueweather.data.WeatherDay;
+import com.trueweather.data.WeatherFromParser;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
 import com.trueweather.utils.UrlWeatherUtils.Site;
@@ -27,29 +29,40 @@ public class GismeteoParser implements ParserWeather {
     private static final Site site = Site.GISMETEO;
 
     @Override
-    public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
+    public WeatherFromParser getWeather(String cityName) {
         String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
         List<WeatherDay> result = Lists.newArrayList();
         LocalDate date = LocalDate.now();
 
         Connection connection = Jsoup.connect(resultUrl).userAgent("Chrome 41.0.2228.0");
-        for (int i = 1; i < 4; i++) {
-            try {
-                Element body = connection.get().body();
+        Element body;
+        try {
+            body = connection.get().body();
+            for (int i = 1; i < 4; i++) {
                 result.add(getWeatherDay(body.select("tbody#tbwdaily" + i).first(), date));
-            } catch (IOException e) {
-                throw new RuntimeException(site.getURL(), e);
+                date = date.plusDays(1);
             }
-
-            date = date.plusDays(1);
+        } catch (IOException e) {
+            throw new RuntimeException(site.getURL(), e);
         }
 
-        return result;
+        return new WeatherFromParser(getCurrentWeather(body), result);
     }
 
+    private WeatherSegment getCurrentWeather(Element element) {
+        Element block = element.select("div.higher").first();
+        Element tempEl = block.select(".value.m_temp.c").first();
+        TextNode node = (TextNode) tempEl.childNode(0);
+        int temp = Integer.parseInt(node.text());
+
+        Element forecastEl = block.select(".cloudness").select("td").first();
+        Forecast forecast = WeatherUtils.getForecastFromText((
+                (TextNode) forecastEl.childNode(0)).text());
+        return new WeatherSegment(temp, forecast);
+    }
 
     private WeatherDay getWeatherDay(Element element, LocalDate date) {
-        WeatherDay weatherDay = new WeatherDay(date,UrlWeatherUtils.Site.GISMETEO);
+        WeatherDay weatherDay = new WeatherDay(date, UrlWeatherUtils.Site.GISMETEO);
         List<WeatherSegment> weatherSegments = Lists.newLinkedList();
 
         Elements temperatures = element.select("tr > td.temp");

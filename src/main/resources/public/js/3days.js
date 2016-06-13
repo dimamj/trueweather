@@ -22,7 +22,7 @@ regApp.controller("3daysCtrl", function ($scope, $http) {
         }
     };
 
-    this.go = function(city){
+    this.go = function (city) {
         this.city = city;
         this.searchWeather();
     };
@@ -39,8 +39,10 @@ regApp.controller("3daysCtrl", function ($scope, $http) {
             if (res.error) {
                 $scope.error = res.error;
             } else {
+                $(".header").css({"margin-bottom": "0"});
                 $scope.vm.cities = res.cities;
                 $scope.result = res.result;
+                $scope.curWeather = res.currentWeather;
             }
             $scope.vm.loadGif = false;
         });

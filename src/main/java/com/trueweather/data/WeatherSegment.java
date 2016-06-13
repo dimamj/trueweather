@@ -28,6 +28,11 @@ public class WeatherSegment {
         this.temperature = temperature;
     }
 
+    public WeatherSegment(int temperature, Forecast forecast) {
+        this.temperature = temperature;
+        this.forecast = forecast;
+    }
+
     public void addVariants(WeatherSegment weatherSegment) {
         temperatureVariants.add(weatherSegment.getTemperature());
         forecastVariants.add(weatherSegment.getForecast());

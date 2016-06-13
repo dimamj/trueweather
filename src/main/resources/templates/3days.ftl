@@ -2,11 +2,11 @@
 
 <@c.page "3 days weather" "/js/3days.js">
 <script type="text/javascript">
-window.angularData = {
-    <#if cities??>
-        cities: ${cities}
-    </#if>
-};
+    window.angularData = {
+        <#if cities??>
+            cities: ${cities}
+        </#if>
+    };
 </script>
 <div ng-app="3daysModule" ng-controller="3daysCtrl as vm">
     <div class="header">
@@ -15,6 +15,22 @@ window.angularData = {
     </div>
 
     <div class="container" style="width:100%">
+        <div class="row" ng-cloak ng-show="curWeather" style="margin-bottom: 1%;">
+            <div class="col-md-offset-5 col-md-2" align="center" style="background-color: rgba(0,0,0,0.1); border-radius: 5px">
+                <table style="border-collapse: separate; border-spacing: 25px 7px;">
+                    <tbody>
+                    <tr><td colspan="2" align="center"><span style="color: white;">Сейчас</span></td></tr>
+                    <tr>
+                        <td>
+                            <h3><strong>{{curWeather.temperature}}</strong><small>°С</small>
+                            </h3>
+                        </td>
+                        <td><img ng-src="img/{{curWeather.forecast}}.png" height="30%"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-offset-4 col-md-4" align="center">
                 <div class="input-group">

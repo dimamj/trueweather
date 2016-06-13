@@ -3,6 +3,8 @@ package com.trueweather.service;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.trueweather.data.WeatherDay;
+import com.trueweather.data.WeatherFromParser;
+import com.trueweather.data.WeatherSegment;
 import com.trueweather.parsers.ParserWeather;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 public class WeatherService {
 
     @Autowired
-    private ParserWeather gismeteoParser, meteoParser, sinoptikParser,yandexParser;
+    private ParserWeather gismeteoParser, meteoParser, sinoptikParser, yandexParser;
 
     private List<ParserWeather> parsers;
 
@@ -36,25 +38,27 @@ public class WeatherService {
     }
 
 
-    public List<WeatherDay> getTrueWeatherOnThreeDays(String city) {
-        List<WeatherDay> resultFromParsers = Lists.newArrayList();
+    public WeatherFromParser getTrueWeatherOnThreeDays(String city) {
+        List<WeatherFromParser> resultFromParsers = Lists.newArrayList();
         parsers.stream().forEach(p -> {
-            resultFromParsers.addAll(p.getWeatherOnThreeDays(city));
+            resultFromParsers.add(p.getWeather(city));
         });
         return getThreeDaysAvgWeather(resultFromParsers);
     }
 
 
-    private List<WeatherDay> getThreeDaysAvgWeather(List<WeatherDay> resultFromParsers) {
+    private WeatherFromParser getThreeDaysAvgWeather(List<WeatherFromParser> resultFromParsers) {
         Map<LocalDate, WeatherDay> result = Maps.newHashMap();
+        List<WeatherDay> allWeather = Lists.newArrayList();
+        resultFromParsers.forEach(r -> allWeather.addAll(r.getWeatherOnThreeDays()));
         LocalDate date = LocalDate.now();
         if (resultFromParsers.isEmpty()) {
-            return Collections.emptyList();
+            return new WeatherFromParser();
         }
 
         for (int i = 0; i < 3; i++) {
             final LocalDate finalDate = date;
-            List<WeatherDay> weatherDays = resultFromParsers.stream()
+            List<WeatherDay> weatherDays = allWeather.stream()
                     .filter(r -> r.getDate().equals(finalDate))
                     .collect(Collectors.toList());
 
@@ -71,9 +75,19 @@ public class WeatherService {
 
         result.entrySet().stream().forEach(e -> e.getValue().calcAvgWeather());
 
-        return result.values().stream()
+        List<WeatherDay> threeDaysWeather =  result.values().stream()
                 .sorted((a, b) -> a.getDate().compareTo(b.getDate()))
                 .collect(Collectors.toList());
+
+        WeatherSegment currentWeather = new WeatherSegment();
+
+        resultFromParsers.forEach(r->{
+            currentWeather.addVariants(r.getCurrentWeather());
+        });
+
+        currentWeather.calcAvgWeather();
+
+        return new WeatherFromParser(currentWeather,threeDaysWeather);
 
     }
 

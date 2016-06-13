@@ -1,7 +1,9 @@
 package com.trueweather.parsers;
 
 import com.google.common.collect.Lists;
+import com.trueweather.data.Forecast;
 import com.trueweather.data.WeatherDay;
+import com.trueweather.data.WeatherFromParser;
 import com.trueweather.data.WeatherSegment;
 import com.trueweather.utils.UrlWeatherUtils;
 import com.trueweather.utils.UrlWeatherUtils.Site;
@@ -32,7 +34,7 @@ public class SinoptikParser implements ParserWeather {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
-    public List<WeatherDay> getWeatherOnThreeDays(String cityName) {
+    public WeatherFromParser getWeather(String cityName) {
         String resultUrl = UrlWeatherUtils.buildUrl(cityName, site);
         List<WeatherDay> result = Lists.newArrayList();
         LocalDate date = LocalDate.now();
@@ -49,7 +51,28 @@ public class SinoptikParser implements ParserWeather {
 
             date = date.plusDays(1);
         }
-        return result;
+
+        Connection connection = Jsoup.connect(resultUrl + "/" + LocalDate.now().format(formatter)).userAgent("Chrome 41.0.2228.0");
+        WeatherSegment currentWeather;
+        try {
+            Element body = connection.get();
+            currentWeather = getCurrentWeather(body);
+        } catch (IOException e) {
+            throw new RuntimeException(site.getURL(), e);
+        }
+
+        return new WeatherFromParser(currentWeather, result);
+    }
+
+
+    private WeatherSegment getCurrentWeather(Element element) {
+        Element tempEl = element.select(".today-temp").first();
+        String tempStr = ((TextNode) tempEl.childNode(0)).text();
+        int temp = Integer.parseInt(tempStr.substring(0, tempStr.length() - 2));
+
+        Element forecastEl = element.select(".imgBlock").select("img").first();
+        Forecast forecast = WeatherUtils.getForecastFromText(forecastEl.attr("alt"));
+        return new WeatherSegment(temp, forecast);
     }
 
 

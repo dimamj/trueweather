@@ -3,6 +3,8 @@ package com.trueweather.web;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.trueweather.data.WeatherDay;
+import com.trueweather.data.WeatherFromParser;
+import com.trueweather.data.WeatherSegment;
 import com.trueweather.service.WeatherService;
 import com.trueweather.utils.CookieUtils;
 import lombok.Data;
@@ -44,13 +46,14 @@ public class ThreeDaysWeatherController {
         }
         CookieUtils.addCityToCookie(request, response, city.toLowerCase().trim());
         return new Result(weatherService.getTrueWeatherOnThreeDays(city.toLowerCase().trim()),
-               CookieUtils.getLastCitiesFromCookie(request));
+                CookieUtils.getLastCitiesFromCookie(request));
     }
 
     @Data
     public static class Result {
         private String error;
         private List<WeatherDay> result = Lists.newArrayList();
+        private WeatherSegment currentWeather = new WeatherSegment();
         private String[] cities;
 
         public Result() {
@@ -60,8 +63,9 @@ public class ThreeDaysWeatherController {
             this.error = error;
         }
 
-        public Result(List<WeatherDay> result, String[] cities) {
-            this.result = result;
+        public Result(WeatherFromParser weatherFromParser, String[] cities) {
+            this.result = weatherFromParser.getWeatherOnThreeDays();
+            this.currentWeather = weatherFromParser.getCurrentWeather();
             this.cities = cities;
         }
     }
